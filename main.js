@@ -1,39 +1,37 @@
 function onOpen() {
-  const ui = SpreadsheetApp.getUi();
-  ui.createMenu('Reportes Funcionales')
-      .addItem('Colorear cursos', 'handleColorearCursos')
-      .addItem('Dependientes', 'handleDependientes')
-      .addSeparator() 
-      .addItem('Limpiar Colores', 'clearColoring')
-      .addToUi();
+  SpreadsheetApp.getUi()
+    .createMenu('Reportes Funcionales')
+    .addItem('Colorear cursos', 'handleColorearCursos')
+    .addItem('Dependientes', 'handleDependientes')
+    .addSeparator()
+    .addItem('Limpiar Colores', 'clearColoring')
+    .addToUi();
 }
 
 function handleColorearCursos() {
   try {
     const catalogo = readCatalogo();
-    if (!catalogo || catalogo.length === 0) {
-      SpreadsheetApp.getUi().alert('La hoja "catalogo" no contiene datos.');
-      return; 
+    if (catalogo.length === 0) {
+      return; // Detiene la ejecución si no hay datos
     }
     const catalogoConConteo = countRequisitos(catalogo);
     applyColor(catalogoConConteo);
     SpreadsheetApp.getUi().alert('Cursos coloreados exitosamente.');
   } catch (e) {
-    SpreadsheetApp.getUi().alert('Error en Colorear cursos: ' + e.message);
+    SpreadsheetApp.getUi().alert('Error al colorear cursos: ' + e.message);
   }
 }
 
 function handleDependientes() {
   try {
     const catalogo = readCatalogo();
-    if (!catalogo || catalogo.length === 0) {
-      SpreadsheetApp.getUi().alert('La hoja "catalogo" no contiene datos.');
-      return; 
+    if (catalogo.length === 0) {
+      return; // Detiene la ejecución si no hay datos
     }
     const dependenciasPorCurso = findDependientes(catalogo);
     writeDependientes(dependenciasPorCurso);
-    SpreadsheetApp.getUi().alert('Columna "Dependientes" agregada exitosamente.');
+    SpreadsheetApp.getUi().alert('Columna "Dependientes" actualizada.');
   } catch (e) {
-    SpreadsheetApp.getUi().alert('Error en Dependientes: ' + e.message);
+    SpreadsheetApp.getUi().alert('Error al generar dependientes: ' + e.message);
   }
 }

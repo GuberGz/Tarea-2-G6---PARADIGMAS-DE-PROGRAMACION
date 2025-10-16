@@ -1,41 +1,33 @@
-
 function countRequisitos(catalogo) {
-  if (!Array.isArray(catalogo)) {
-      return [];
-  }
-    
   return catalogo.map(curso => ({
-    ...curso, 
-    cantidadRequisitos: (curso.requisitosparsed && Array.isArray(curso.requisitosparsed)) ? curso.requisitosparsed.length : 0
+    ...curso,
+    cantidadRequisitos: curso.requisitosparsed.length
   }));
 }
 
 function findDependientes(catalogo) {
-  if (!Array.isArray(catalogo)) {
-      return {};
-  }
-    
-  const dependientesMap = catalogo.reduce((acc, curso) => {
-    acc[curso.codigo] = [];
-    return acc;
-  }, {});
+  const nameToCodeMap = {};
+  const dependientesMap = {};
 
-  catalogo.forEach(cursoDependiente => {
-    if (cursoDependiente.requisitosparsed && Array.isArray(cursoDependiente.requisitosparsed)) {
-      cursoDependiente.requisitosparsed.forEach(requisitoStr => {
-        const codigoRequisitoLimpio = requisitoStr.split('(')[0].split('o')[0].trim(); 
-        
-        if (dependientesMap.hasOwnProperty(codigoRequisitoLimpio)) {
-          dependientesMap[codigoRequisitoLimpio].push(cursoDependiente.curso);
-        }
-      });
-    }
+  catalogo.forEach(curso => {
+    nameToCodeMap[curso.curso.trim()] = curso.codigo;
+    dependientesMap[curso.codigo] = [];
   });
 
-  const resultadoFormateado = {};
+  catalogo.forEach(cursoDependiente => {
+    cursoDependiente.requisitosparsed.forEach(requisitoNombre => {
+      const nombreLimpio = requisitoNombre.split('(')[0].trim();
+      const codigoRequisito = nameToCodeMap[nombreLimpio];
+
+      if (codigoRequisito && dependientesMap[codigoRequisito]) {
+        dependientesMap[codigoRequisito].push(cursoDependiente.curso);
+      }
+    });
+  });
+
   for (const codigo in dependientesMap) {
-    resultadoFormateado[codigo] = dependientesMap[codigo].join(', ');
+    dependientesMap[codigo] = dependientesMap[codigo].join(', ');
   }
-  
-  return resultadoFormateado;
+
+  return dependientesMap;
 }
