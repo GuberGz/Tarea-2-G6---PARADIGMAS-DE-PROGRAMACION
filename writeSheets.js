@@ -11,7 +11,7 @@ function applyColor(catalogoConConteo) {
     } else {
       color = '#f4cccc';
     }
-    sheet.getRange(curso.rowIndex, 1, 1, lastCol).setBackground(color);
+    sheet.getRange(curso.fila, 1, 1, lastCol).setBackground(color);
   });
 }
 

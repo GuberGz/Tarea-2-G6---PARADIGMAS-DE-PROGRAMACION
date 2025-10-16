@@ -12,7 +12,7 @@ function handleColorearCursos() {
   try {
     const catalogo = readCatalogo();
     if (catalogo.length === 0) {
-      return; // Detiene la ejecución si no hay datos
+      return;
     }
     const catalogoConConteo = countRequisitos(catalogo);
     applyColor(catalogoConConteo);
@@ -26,7 +26,7 @@ function handleDependientes() {
   try {
     const catalogo = readCatalogo();
     if (catalogo.length === 0) {
-      return; // Detiene la ejecución si no hay datos
+      return;
     }
     const dependenciasPorCurso = findDependientes(catalogo);
     writeDependientes(dependenciasPorCurso);
