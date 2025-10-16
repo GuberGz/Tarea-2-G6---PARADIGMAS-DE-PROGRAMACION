@@ -1,6 +1,6 @@
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('Reportes Funcionales')
+    .createMenu('Menu')
     .addItem('Colorear cursos', 'handleColorearCursos')
     .addItem('Dependientes', 'handleDependientes')
     .addSeparator()
